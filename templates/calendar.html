@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>かぐや姫カレンダー</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body
+    class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 min-h-screen"
+  >
+    <div class="container mx-auto px-4 py-8">
+      <!-- ヘッダー -->
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-white mb-2">
+          <i class="fas fa-moon text-yellow-300 mr-2"></i>
+          かぐや姫カレンダー
+        </h1>
+        <p class="text-purple-200">
+          グッズの所持状況と購入予定を管理しましょう
+        </p>
+      </div>
+
+      <!-- ナビゲーション -->
+      <div class="flex justify-between items-center mb-6">
+        <a
+          href="{{ url_for('index', year=prev_year, month=prev_month) }}"
+          class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors"
+        >
+          <i class="fas fa-chevron-left mr-2"></i>前月
+        </a>
+
+        <h2 class="text-2xl font-bold text-white">{{ year }}年{{ month }}月</h2>
+
+        <a
+          href="{{ url_for('index', year=next_year, month=next_month) }}"
+          class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors"
+        >
+          次月<i class="fas fa-chevron-right ml-2"></i>
+        </a>
+      </div>
+
+      <!-- 凡例 -->
+      <div class="mb-4 grid grid-cols-2 gap-4 text-sm">
+        <div class="bg-white/10 rounded-lg p-3">
+          <i class="fas fa-check-circle text-green-400 mr-2"></i>
+          <span class="text-white">現在の所持</span>
+        </div>
+        <div class="bg-white/10 rounded-lg p-3">
+          <i class="fas fa-calendar-check text-yellow-400 mr-2"></i>
+          <span class="text-white">購入予定</span>
+        </div>
+      </div>
+
+      <!-- カレンダー -->
+      <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 shadow-2xl">
+        <div class="grid grid-cols-7 gap-2 mb-4">
+          {% for day_name in ['日', '月', '火', '水', '木', '金', '土'] %}
+          <div
+            class="text-center font-bold text-white py-2 {{ 'text-red-300' if day_name == '日' else 'text-blue-300' if day_name == '土' else 'text-purple-200' }}"
+          >
+            {{ day_name }}
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="grid grid-cols-7 gap-2">
+          {% for week in cal %} {% for day in week %} {% if day == 0 %}
+          <div class="h-24 bg-gray-800/30 rounded-lg"></div>
+          {% else %}
+          <div
+            class="h-24 bg-white/5 hover:bg-white/10 rounded-lg p-2 transition-colors cursor-pointer overflow-hidden"
+            onclick="window.location.href='{{ url_for('day_detail', year=year, month=month, day=day) }}'"
+          >
+            <div
+              class="text-white font-semibold mb-1 text-sm {{ 'text-red-300' if loop.revindex % 7 == 0 else 'text-blue-300' if loop.revindex % 7 == 1 else '' }}"
+            >
+              {{ day }}
+            </div>
+            <div class="text-xs space-y-1 overflow-y-auto max-h-16">
+              {% if day_goods[day] %} {% for goods in day_goods[day][:3] %}
+              <div
+                class="bg-purple-600/80 text-white rounded px-1 py-0.5 truncate flex items-center space-x-1"
+              >
+                {% if goods.image_url %}
+                <img
+                  src="{{ goods.image_url }}"
+                  alt="{{ goods.name }}"
+                  class="w-4 h-4 rounded object-cover"
+                />
+                {% else %}
+                <i class="fas fa-image text-gray-300 text-xs"></i>
+                {% endif %}
+                <span>{{ goods.name[:15] }}</span>
+              </div>
+              {% endfor %} {% if day_goods[day]|length > 3 %}
+              <div class="text-purple-300 text-xs">
+                +{{ day_goods[day]|length - 3 }} 件
+              </div>
+              {% endif %} {% endif %}
+            </div>
+          </div>
+          {% endif %} {% endfor %} {% endfor %}
+        </div>
+      </div>
+
+      <!-- フッター -->
+      <div class="text-center mt-8 space-x-4">
+        <a
+          href="{{ url_for('goods_list') }}"
+          class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-colors inline-flex items-center"
+        >
+          <i class="fas fa-list mr-2"></i>グッズ管理
+        </a>
+        <a
+          href="{{ url_for('search_goods') }}?q="
+          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors inline-flex items-center"
+        >
+          <i class="fas fa-search mr-2"></i>グッズ検索
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

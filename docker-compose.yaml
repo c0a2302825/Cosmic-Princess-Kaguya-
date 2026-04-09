@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # Flaskバックエンド
   app:
@@ -11,6 +9,9 @@ services:
     environment:
       # Dockerネットワーク内のDBホスト名 'db' を指定
       - DB_URL=mysql+pymysql://root:kaguya_pass@db:3306/kaguya_db
+    volumes:
+      - ./templates:/app/templates
+      - ./kaguya_app.py:/app/kaguya_app.py
     depends_on:
       db:
         condition: service_healthy

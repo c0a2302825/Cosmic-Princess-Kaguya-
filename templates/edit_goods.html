@@ -38,66 +38,11 @@ content %}
         required
         class="w-full px-4 py-3 border-2 border-pink-200 rounded-lg focus:border-pink-400 focus:outline-none transition-colors bg-white"
       >
-        <option
-          value="フィギュア"
-          {%
-          if
-          goods.category=""
-          ="フィギュア"
-          %}selected{%
-          endif
-          %}
-        >
-          🎎 フィギュア
-        </option>
-        <option
-          value="ポスター"
-          {%
-          if
-          goods.category=""
-          ="ポスター"
-          %}selected{%
-          endif
-          %}
-        >
-          🖼️ ポスター
-        </option>
-        <option
-          value="Tシャツ"
-          {%
-          if
-          goods.category=""
-          ="Tシャツ"
-          %}selected{%
-          endif
-          %}
-        >
-          👕 Tシャツ
-        </option>
-        <option
-          value="アクセサリー"
-          {%
-          if
-          goods.category=""
-          ="アクセサリー"
-          %}selected{%
-          endif
-          %}
-        >
-          💍 アクセサリー
-        </option>
-        <option
-          value="その他"
-          {%
-          if
-          goods.category=""
-          ="その他"
-          %}selected{%
-          endif
-          %}
-        >
-          📦 その他
-        </option>
+        <option value="フィギュア" {{ categories['フィギュア'] }}>🎎 フィギュア</option>
+        <option value="ポスター" {{ categories['ポスター'] }}>🖼️ ポスター</option>
+        <option value="Tシャツ" {{ categories['Tシャツ'] }}>👕 Tシャツ</option>
+        <option value="アクセサリー" {{ categories['アクセサリー'] }}>💍 アクセサリー</option>
+        <option value="その他" {{ categories['その他'] }}>📦 その他</option>
       </select>
     </div>
 
@@ -162,6 +107,22 @@ content %}
       />
       <p class="text-xs text-gray-500 mt-1">
         商品の画像がある場合はURLを入力してください
+      </p>
+    </div>
+
+    <div>
+      <label for="release_date" class="block text-sm font-bold text-pink-700 mb-2">
+        <i class="fas fa-calendar-alt mr-1"></i>発売日 (オプション)
+      </label>
+      <input
+        type="date"
+        id="release_date"
+        name="release_date"
+        value="{% if goods.release_date %}{{ goods.release_date.strftime('%Y-%m-%d') }}{% endif %}"
+        class="w-full px-4 py-3 border-2 border-pink-200 rounded-lg focus:border-pink-400 focus:outline-none transition-colors"
+      />
+      <p class="text-xs text-gray-500 mt-1">
+        発売日を設定するとカレンダーに表示されます
       </p>
     </div>
 
