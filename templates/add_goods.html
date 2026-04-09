@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>グッズ追加 - 超かぐや姫！</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+      label {
+        font-weight: bold;
+      }
+      input,
+      select,
+      textarea {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .submit-btn {
+        background: #4caf50;
+        color: white;
+      }
+      .cancel-btn {
+        background: #6c757d;
+        color: white;
+        text-decoration: none;
+        text-align: center;
+      }
+      .buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>✨ 新しいグッズを追加</h1>
+      <form method="POST">
+        <div>
+          <label for="name">商品名:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div>
+          <label for="category">カテゴリ:</label>
+          <select id="category" name="category" required>
+            <option value="">選択してください</option>
+            <option value="フィギュア">フィギュア</option>
+            <option value="ポスター">ポスター</option>
+            <option value="Tシャツ">Tシャツ</option>
+            <option value="アクセサリー">アクセサリー</option>
+            <option value="その他">その他</option>
+          </select>
+        </div>
+        <div>
+          <label for="price">価格 (円):</label>
+          <input type="number" id="price" name="price" step="0.01" required />
+        </div>
+        <div>
+          <label for="stock">在庫数:</label>
+          <input type="number" id="stock" name="stock" required />
+        </div>
+        <div>
+          <label for="description">説明:</label>
+          <textarea id="description" name="description"></textarea>
+        </div>
+        <div>
+          <label for="image_url">画像URL:</label>
+          <input type="url" id="image_url" name="image_url" />
+        </div>
+        <div class="buttons">
+          <button type="submit" class="btn submit-btn">追加する</button>
+          <a href="{{ url_for('index') }}" class="btn cancel-btn">キャンセル</a>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
