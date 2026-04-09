@@ -1,141 +1,144 @@
-{% extends "layout.html" %}
-<!doctype html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>超かぐや姫！グッズ管理</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        background-color: #f5f5f5;
-      }
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-      h1 {
-        color: #333;
-        text-align: center;
-      }
-      .add-btn {
-        display: inline-block;
-        background: #4caf50;
-        color: white;
-        padding: 10px 20px;
-        text-decoration: none;
-        border-radius: 4px;
-        margin-bottom: 20px;
-      }
-      .add-btn:hover {
-        background: #45a049;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-      }
-      th,
-      td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-      }
-      th {
-        background-color: #f2f2f2;
-      }
-      .actions {
-        display: flex;
-        gap: 10px;
-      }
-      .edit-btn {
-        background: #2196f3;
-        color: white;
-        padding: 5px 10px;
-        text-decoration: none;
-        border-radius: 4px;
-      }
-      .delete-btn {
-        background: #f44336;
-        color: white;
-        padding: 5px 10px;
-        text-decoration: none;
-        border-radius: 4px;
-      }
-      .flash {
-        padding: 10px;
-        margin-bottom: 20px;
-        border-radius: 4px;
-      }
-      .success {
-        background: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>🌙 超かぐや姫！グッズ管理システム 🌙</h1>
+{% extends "layout.html" %} {% block title %}グッズ一覧{% endblock %} {% block
+content %}
+<div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-pink-600 flex items-center gap-3">
+      <i class="fas fa-list-ul"></i>
+      グッズ一覧
+    </h1>
+    <a
+      href="{{ url_for('add_goods') }}"
+      class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2"
+    >
+      <i class="fas fa-plus"></i>
+      新しいグッズを追加
+    </a>
+  </div>
 
-      {% with messages = get_flashed_messages() %} {% if messages %} {% for
-      message in messages %}
-      <div class="flash success">{{ message }}</div>
-      {% endfor %} {% endif %} {% endwith %}
-
-      <a href="{{ url_for('add_goods') }}" class="add-btn"
-        >✨ 新しいグッズを追加</a
-      >
-
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>商品名</th>
-            <th>カテゴリ</th>
-            <th>価格</th>
-            <th>在庫数</th>
-            <th>説明</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for goods in goods %}
-          <tr>
-            <td>{{ goods.id }}</td>
-            <td>{{ goods.name }}</td>
-            <td>{{ goods.category }}</td>
-            <td>¥{{ "%.0f"|format(goods.price) }}</td>
-            <td>{{ goods.stock }}</td>
-            <td>{{ goods.description or 'なし' }}</td>
-            <td class="actions">
-              <a
-                href="{{ url_for('edit_goods', id=goods.id) }}"
-                class="edit-btn"
-                >編集</a
+  {% if goods %}
+  <div class="overflow-x-auto">
+    <table class="w-full table-auto border-collapse">
+      <thead>
+        <tr class="bg-pink-50">
+          <th
+            class="px-6 py-4 text-left text-pink-700 font-bold border-b-2 border-pink-200"
+          >
+            商品名
+          </th>
+          <th
+            class="px-6 py-4 text-left text-pink-700 font-bold border-b-2 border-pink-200"
+          >
+            カテゴリ
+          </th>
+          <th
+            class="px-6 py-4 text-left text-pink-700 font-bold border-b-2 border-pink-200"
+          >
+            価格
+          </th>
+          <th
+            class="px-6 py-4 text-left text-pink-700 font-bold border-b-2 border-pink-200"
+          >
+            在庫
+          </th>
+          <th
+            class="px-6 py-4 text-left text-pink-700 font-bold border-b-2 border-pink-200"
+          >
+            操作
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for goods_item in goods %}
+        <tr
+          class="hover:bg-pink-25 transition-colors duration-200 border-b border-pink-100"
+        >
+          <td class="px-6 py-4">
+            <div class="flex items-center gap-3">
+              {% if goods_item.image_url %}
+              <img
+                src="{{ goods_item.image_url }}"
+                alt="{{ goods_item.name }}"
+                class="w-12 h-12 object-cover rounded-lg shadow-sm"
+              />
+              {% else %}
+              <div
+                class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center"
               >
+                <i class="fas fa-image text-pink-400"></i>
+              </div>
+              {% endif %}
+              <div>
+                <div class="font-bold text-gray-800">{{ goods_item.name }}</div>
+                {% if goods_item.description %}
+                <div class="text-sm text-gray-500 truncate max-w-xs">
+                  {{ goods_item.description }}
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </td>
+          <td class="px-6 py-4">
+            <span
+              class="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm font-medium"
+            >
+              {{ goods_item.category }}
+            </span>
+          </td>
+          <td class="px-6 py-4 font-bold text-green-600">
+            ¥{{ "%.0f"|format(goods_item.price) }}
+          </td>
+          <td class="px-6 py-4">
+            {% if goods_item.stock > 10 %}
+            <span class="text-green-600 font-bold">{{ goods_item.stock }}</span>
+            {% elif goods_item.stock > 0 %}
+            <span class="text-yellow-600 font-bold"
+              >{{ goods_item.stock }}</span
+            >
+            {% else %}
+            <span class="text-red-600 font-bold">在庫なし</span>
+            {% endif %}
+          </td>
+          <td class="px-6 py-4">
+            <div class="flex gap-2">
               <a
-                href="{{ url_for('delete_goods', id=goods.id) }}"
-                class="delete-btn"
-                onclick="return confirm('本当に削除しますか？');"
-                >削除</a
+                href="{{ url_for('edit_goods', id=goods_item.id) }}"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 flex items-center gap-1"
               >
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-      {% if not goods %}
-      <p style="text-align: center; margin-top: 20px; color: #666">
-        まだグッズが登録されていません。新しいグッズを追加してください！
-      </p>
-      {% endif %}
-    </div>
-  </body>
-</html>
+                <i class="fas fa-edit"></i>
+                編集
+              </a>
+              <a
+                href="{{ url_for('delete_goods', id=goods_item.id) }}"
+                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 flex items-center gap-1"
+                onclick="return confirm('本当にこのグッズを削除しますか？');"
+              >
+                <i class="fas fa-trash"></i>
+                削除
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="text-center py-12">
+    <i class="fas fa-box-open text-6xl text-pink-200 mb-4"></i>
+    <h2 class="text-2xl font-bold text-pink-600 mb-2">
+      まだグッズがありません
+    </h2>
+    <p class="text-gray-600 mb-6">
+      最初のグッズを追加して、かぐや姫の世界を広げましょう！
+    </p>
+    <a
+      href="{{ url_for('add_goods') }}"
+      class="bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full font-bold transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center gap-2"
+    >
+      <i class="fas fa-plus"></i>
+      最初のグッズを追加
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
